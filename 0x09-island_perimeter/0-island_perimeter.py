@@ -1,23 +1,35 @@
 #!/usr/bin/python3
 
 def island_perimeter(grid):
-    
+    rows, cols = len(grid), len(grid[0])
     perimeter = 0
-    # Iterate through the grid
-    for i in range(len(grid)):
-        for j in range(len(grid[0])):
-            if grid[i][j] == 1:
-                perimeter += 4
 
-                if i > 0 and grid[i - 1][j] == 1:
-                    perimeter -= 1
+    # Define the four possible directions: up, down, left, and right
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
-                if i < len(grid) - 1 and grid[i + 1][j] ==1:
-                    perimeter -= 1
+    for row in range(rows):
+        for col in range(cols):
+            if grid[row][col] == 1:
+                # Count the exposed sides for this land cell
+                for dr, dc in directions:
+                    new_row, new_col = row + dr, col + dc
+                    if (
+                        new_row < 0
+                        or new_row >= rows
+                        or new_col < 0
+                        or new_col >= cols
+                        or grid[new_row][new_col] == 0
+                    ):
+                        perimeter += 1
 
-                if j > 0 and grid[i][j - 1] == 1:
-                    perimeter -= 1
-
-                if j < len(grid[0]) - 1 and grid[i][j + 1] ==1:
-                    perimeter -= 1
     return perimeter
+
+# Example usage
+grid = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0],
+    [0, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0]
+]
+print(island_perimeter(grid))  # Output: 12
