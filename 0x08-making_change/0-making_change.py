@@ -21,11 +21,11 @@ def makeChange(coins, total):
         while coin <= total:
             total -= coin
             change += 1
+            print(
+                    f"Using coin: {coin},"
+                    f"remaining total: {total},"
+                    f"coins used: {change}"
+            )
         if total == 0:
             return change
     return -1
-
-
-# Testing the function
-print(makeChange([1, 2, 25], 37))  # Output: 7
-print(makeChange([1256, 54, 48, 16, 102], 1453))  # Output: -1
