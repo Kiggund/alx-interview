@@ -4,6 +4,8 @@ Contains a function to determine the fewest
 number of coins needed to meet a given amount total.
 """
 
+from collections import deque
+
 
 def makeChange(coins, total):
     """
@@ -16,14 +18,20 @@ def makeChange(coins, total):
     if not coins:
         return -1
 
-    """ Initialize the dp array with a value greater
-        than the possible number of coins
-    """
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0
+    # Use a queue to perform BFS
+    queue = deque([(0, 0)])  # (current amount, number of coins)
+    visited = set()
 
-    for coin in coins:
-        for i in range(coin, total + 1):
-            dp[i] = min(dp[i], dp[i - coin] + 1)
+    while queue:
+        current_amount, num_coins = queue.popleft()
 
-    return dp[total] if dp[total] != float('inf') else -1
+        for coin in coins:
+            next_amount = current_amount + coin
+
+            if next_amount == total:
+                return num_coins + 1
+            if next_amount < total and next_amount not in visited:
+                visited.add(next_amount)
+                queue.append((next_amount, num_coins + 1))
+
+    return -1
