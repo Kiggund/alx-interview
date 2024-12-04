@@ -43,4 +43,4 @@ grid = [
     [0, 1, 1, 1, 0, 0],
     [0, 0, 0, 0, 0, 0]
 ]
-print(island_perimeter(grid))  # Output: 12 why is it failing the output
+print(island_perimeter(grid))  # Output: 12
