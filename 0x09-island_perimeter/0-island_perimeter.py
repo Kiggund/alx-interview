@@ -31,16 +31,6 @@ def island_perimeter(grid):
                         or grid[new_row][new_col] == 0
                     ):
                         perimeter += 1
+                        print(f"Adding to perimeter at ({row}, {col}) from direction ({dr}, {dc})")
 
     return perimeter
-# Example usage
-
-
-grid = [
-    [0, 0, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0],
-    [0, 1, 1, 1, 0, 0],
-    [0, 0, 0, 0, 0, 0]
-]
-print(island_perimeter(grid))  # Output: 12
