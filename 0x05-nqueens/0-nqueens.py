@@ -1,54 +1,42 @@
 #!/usr/bin/python3
-import sys
+"""
+Prime game module
+"""
 
-def is_safe(board, row, col):
-    for i in range(col):
-        if board[row][i] == 1:
-            return False
-    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
-        if board[i][j] == 1:
-            return False
-    for i, j in zip(range(row, len(board), 1), range(col, -1, -1)):
-        if board[i][j] == 1:
-            return False
-    return True
 
-def solve_nqueens_util(board, col):
-    if col >= len(board):
-        print_solution(board)
-        return True
-    res = False
-    for i in range(len(board)):
-        if is_safe(board, i, col):
-            board[i][col] = 1
-            res = solve_nqueens_util(board, col + 1) or res
-            board[i][col] = 0
-    return res
-
-def solve_nqueens(n):
-    board = [[0 for _ in range(n)] for _ in range(n)]
-    if not solve_nqueens_util(board, 0):
-        print("Solution does not exist")
-        return
-
-def print_solution(board):
-    solution = []
-    for i in range(len(board)):
-        for j in range(len(board)):
-            if board[i][j] == 1:
-                solution.append([i, j])
-    print(solution)
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: nqueens N")
-        sys.exit(1)
-    try:
-        N = int(sys.argv[1])
-    except ValueError:
-        print("N must be a number")
-        sys.exit(1)
-    if N < 4:
-        print("N must be at least 4")
-        sys.exit(1)
-    solve_nqueens(N)
+def is_winner(x, nums):
+    """
+    a function to determine the winner of the prime game.
+    """
+    def primes_up_to(n):
+        """
+        Generate all prime numbers up to n using the Sieve of Eratosthenes.
+        """
+        if n < 2:
+            return []
+        sieve = [True] * (n + 1)
+        sieve[0], sieve[1] = False, False
+        for p in range(2, int(n**0.5) + 1):
+            if sieve[p]:
+                for i in range(p * p, n + 1, p):
+                    sieve[i] = False
+        return [p for p in range(2, n + 1) if sieve[p]]
+    maria_wins = 0
+    ben_wins = 0
+    for n in nums:
+        primes = primes_up_to(n)
+        moves = 0
+        while primes:
+            prime = primes.pop(0)
+            primes = [p for p in primes if p % prime != 0]
+            moves += 1
+        if moves % 2 == 0:
+            ben_wins += 1
+        else:
+            maria_wins += 1
+    if maria_wins > ben_wins:
+        return "Maria"
+    elif ben_wins > maria_wins:
+        return "Ben"
+    else:
+        return None
