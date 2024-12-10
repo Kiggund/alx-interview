@@ -1,42 +1,30 @@
-/usr/bin/python3
-"""
-Prime game module
-"""
+#!/usr/bin/python3
+""" Module for solving prime game question """
 
 
-def is_winner(x, nums):
-    """
-    a function to determine the winner of the prime game.
-    """
-    def primes_up_to(n):
-        """
-        Generate all prime numbers up to n using the Sieve of Eratosthenes.
-        """
-        if n < 2:
-            return []
-        sieve = [True] * (n + 1)
-        sieve[0], sieve[1] = False, False
-        for p in range(2, int(n**0.5) + 1):
-            if sieve[p]:
-                for i in range(p * p, n + 1, p):
-                    sieve[i] = False
-        return [p for p in range(2, n + 1) if sieve[p]]
-    maria_wins = 0
-    ben_wins = 0
-    for n in nums:
-        primes = primes_up_to(n)
-        moves = 0
-        while primes:
-            prime = primes.pop(0)
-            primes = [p for p in primes if p % prime != 0]
-            moves += 1
-        if moves % 2 == 0:
-            ben_wins += 1
-        else:
-            maria_wins += 1
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
+def isWinner(x, nums):
+    """function that checks for the winner"""
+    if not nums or x < 1:
         return None
+    max_num = max(nums)
+
+    my_filter = [True for _ in range(max(max_num + 1, 2))]
+    for i in range(2, int(pow(max_num, 0.5)) + 1):
+        if not my_filter[i]:
+            continue
+        for j in range(i * i, max_num + 1, i):
+            my_filter[j] = False
+    my_filter[0] = my_filter[1] = False
+    y = 0
+    for i in range(len(my_filter)):
+        if my_filter[i]:
+            y += 1
+        my_filter[i] = y
+    player1 = 0
+    for x in nums:
+        player1 += my_filter[x] % 2 == 1
+    if player1 * 2 == len(nums):
+        return None
+    if player1 * 2 > len(nums):
+        return "Maria"
+    return "Ben"
